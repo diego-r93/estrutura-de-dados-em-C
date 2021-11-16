@@ -43,12 +43,19 @@ LIB_LISTA_DIN_ENCAD_OBJS = ListaDinEncad.o
 LIB_LISTA_DIN_ENCAD = lib-listaDinEncad.a
 
 
+LISTA_DIN_ENCAD_CIRC_OBJS = main-lista-din-encad-circ.o
+
+LIB_LISTA_DIN_ENCAD_CIRC_OBJS = ListaDinEncadCirc.o
+
+LIB_LISTA_DIN_ENCAD_CIRC = lib-listaDinEncadCirc.a
+
 
 TARGETS =	lista-sequencial\
-			lista-din-encad
+			lista-din-encad\
+			lista-din-encad-circ
 
 
-LIBS = $(LIB_LISTA_SEQUENCIAL) $(LIB_LISTA_DIN_ENCAD)
+LIBS = $(LIB_LISTA_SEQUENCIAL) $(LIB_LISTA_DIN_ENCAD) $(LIB_LISTA_DIN_ENCAD_CIRC)
 
 ALL = $(TARGETS) $(LIBS)
 
@@ -62,11 +69,17 @@ lib-lista-sequencial.a: $(LIB_LISTA_SEQUENCIAL_OBJS)
 lib-listaDinEncad.a: $(LIB_LISTA_DIN_ENCAD_OBJS)
 	$(AR) -r $@ $^
 
+lib-listaDinEncadCirc.a: $(LIB_LISTA_DIN_ENCAD_CIRC_OBJS)
+	$(AR) -r $@ $^
+
 lista-sequencial: $(LIB_LISTA_SEQUENCIAL) $(LISTA_SEQUENCIAL_OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^ -L. -l-lista-sequencial
 
 lista-din-encad:$(LIB_LISTA_DIN_ENCAD) $(LISTA_DIN_ENCAD_OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^ -L. -l-listaDinEncad
+
+lista-din-encad-circ:$(LIB_LISTA_DIN_ENCAD_CIRC) $(LISTA_DIN_ENCAD_CIRC_OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^ -L. -l-listaDinEncadCirc
 
 
 .PHONY: all clean
