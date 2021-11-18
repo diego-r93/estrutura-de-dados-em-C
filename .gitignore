@@ -1,7 +1,13 @@
-# Executables
+# Ignore all
 *
-!/**/
+
+# Unignore all with extensions
 !*.*
+
+# Unignore all dirs
+!*/
+
+# Executables
 *.exe
 
 # Prerequisites
