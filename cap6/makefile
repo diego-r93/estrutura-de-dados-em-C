@@ -36,10 +36,20 @@ LIB_FILA_ESTATICA_OBJS = FilaEstatica.o
 LIB_FILA_ESTATICA = lib-fila-estatica.a
 
 
-TARGETS =	fila-estatica
+FILA_DIN_OBJS = main-fila-din.o
+
+LIB_FILA_DIN_OBJS = FilaDin.o
+
+LIB_FILA_DIN = lib-fila-din.a
 
 
-LIBS =	$(LIB_FILA_ESTATICA)
+
+TARGETS =	fila-estatica\
+			fila-din
+
+
+LIBS =	$(LIB_FILA_ESTATICA)\
+		$(LIB_FILA_DIN)
 
 ALL = $(TARGETS) $(LIBS)
 
@@ -53,6 +63,12 @@ lib-fila-estatica.a: $(LIB_FILA_ESTATICA_OBJS)
 fila-estatica: $(LIB_FILA_ESTATICA) $(FILA_ESTATICA_OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^ -L. -l-fila-estatica
 
+
+lib-fila-din.a: $(LIB_FILA_DIN_OBJS)
+	$(AR) -r $@ $^
+
+fila-din: $(LIB_FILA_DIN) $(FILA_DIN_OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^ -L. -l-fila-din
 
 
 .PHONY: all clean
