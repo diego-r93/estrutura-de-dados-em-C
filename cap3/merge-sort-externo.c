@@ -2,51 +2,36 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NUMBER 100
+#define NUMBER 10000
 
-int particiona(int *V, int inicio, int final)
+struct arquivo
 {
-   int esq, dir, pivo, aux;
-   esq = inicio;
-   dir = final;
-   pivo = V[inicio];
+   FILE *f;
+   int pos, MAX, *buffer;
+};
 
-   while (esq < dir)
+void quickSort(int *v, int inicio, int fim)
+{
+   int i = inicio, j = fim, aux, meio, x;
+   meio = (inicio + fim) / 2;
+   x = v[meio];
+   while (i <= j)
    {
-      while (V[esq] <= pivo)
-         esq++;
-      while (V[dir] > pivo)
-         dir--;
-      if (esq < dir)
+      if (v[i] < x)
+         i++;
+      else if (v[j] > x)
+         j--;
+      else
       {
-         aux = V[esq];
-         V[esq] = V[dir];
-         V[dir] = aux;
+         aux = v[i];
+         v[i++] = v[j];
+         v[j--] = aux;
       }
    }
-   V[inicio] = V[dir];
-   V[dir] = pivo;
-
-   return dir;
-}
-
-void quick(int *V, int inicio, int fim)
-{
-   int pivo;
-
-   if (fim > inicio)
-   {
-      pivo = particiona(V, inicio, fim);
-      quick(V, inicio, pivo - 1);
-      quick(V, pivo + 1, fim);
-   }
-}
-
-void quickSort(int *V, int N)
-{
-   int inicio = 0, fim = N - 1;
-
-   quick(V, inicio, fim);
+   if (inicio < j)
+      quickSort(v, inicio, j);
+   if (fim > i)
+      quickSort(v, i, fim);
 }
 
 void criaArquivoTeste(char *nome)
@@ -55,7 +40,7 @@ void criaArquivoTeste(char *nome)
    FILE *myFile = fopen(nome, "w");
    srand(time(NULL));
 
-   for (i = 1; i < 1000; i++)
+   for (i = 1; i < 9000; i++)
       fprintf(myFile, "%d\n", rand());
    fprintf(myFile, "%d", rand());
    fclose(myFile);
@@ -93,7 +78,7 @@ int criaArquivosOrdenados(char *nome)
       {
          K++;
          sprintf(novo, "Temp%d.txt", K);
-         quick(V, 0, NUMBER - 1);
+         quickSort(V, 0, total - 1);
          salvaArquivo(novo, V, total, 0);
          total = 0;
       }
@@ -103,19 +88,13 @@ int criaArquivosOrdenados(char *nome)
    {
       K++;
       sprintf(novo, "Temp%d.txt", K);
-      quick(V, total, sizeof(int));
+      quickSort(V, 0, total - 1);
       salvaArquivo(novo, V, total, 0);
    }
 
    fclose(myFile);
    return K;
 }
-
-struct arquivo
-{
-   FILE *f;
-   int pos, MAX, *buffer;
-};
 
 void preencheBuffer(struct arquivo *arq, int T)
 {
@@ -155,7 +134,7 @@ int procuraMenor(struct arquivo *arq, int K, int T, int *menor)
             idx = i;
          else
          {
-            if (arq[i].buffer[arq[i].pos < arq[idx].buffer[arq[idx].pos]])
+            if (arq[i].buffer[arq[i].pos] < arq[idx].buffer[arq[idx].pos])
                idx = i;
          }
       }
@@ -187,7 +166,7 @@ void merge(char *nome, int K, int T)
    {
       sprintf(novo, "Temp%d.txt", i + 1);
       arq[i].f = fopen(novo, "r");
-      arq[i].buffer = (int *)malloc(T * sizeof(struct arquivo));
+      arq[i].buffer = (int *)malloc(T * sizeof(int));
       preencheBuffer(&arq[i], T);
    }
 
@@ -214,14 +193,13 @@ void merge(char *nome, int K, int T)
    free(saida);
 }
 
-void mergeSortExterno(char *nome)
+void mergeSortExterno(char *origem, char *destino)
 {
    char novo[20];
-   int K = criaArquivosOrdenados(nome);
+   int K = criaArquivosOrdenados(origem);
    int i, T = NUMBER / (K + 1);
 
-   remove(nome);
-   merge(nome, K, T);
+   merge(destino, K, T);
 
    for (i = 0; i < K; i++)
    {
@@ -232,7 +210,8 @@ void mergeSortExterno(char *nome)
 
 int main()
 {
-   criaArquivoTeste("dados.txt");
-   mergeSortExterno("dados.txt");
+   // criaArquivoTeste("ordenados.txt");
+   mergeSortExterno("desordenados.txt", "ordenados.txt");
+
    return 0;
 }

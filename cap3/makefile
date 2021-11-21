@@ -79,4 +79,4 @@ merge-sort-externo: $(MERGE_SORT_EXTERNO_OBJS)
 all: $(TARGETS)
 
 clean:
-	$(RM) *.o $(TARGETS) *.txt
+	$(RM) *.o $(TARGETS)
