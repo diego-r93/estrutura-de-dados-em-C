@@ -28,7 +28,8 @@ endif
 TARGETS =	array-ordering\
 			struct-ordering\
 			array-search\
-			struct-search
+			struct-search\
+			merge-sort-externo
 
 ARRAY_ORDERING_OBJS =	array-ordering.o\
 						buble-sort.o\
@@ -51,7 +52,9 @@ ARRAY_SEARCH_OBJS =	array-search.o\
 					heap-sort.o
 
 STRUCT_SEARCH_OBJS =	struct-search.o\
-						search.o					
+						search.o
+
+MERGE_SORT_EXTERNO_OBJS =	merge-sort-externo.o			
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
@@ -68,9 +71,12 @@ array-search: $(ARRAY_SEARCH_OBJS)
 struct-search: $(STRUCT_SEARCH_OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^
 
+merge-sort-externo: $(MERGE_SORT_EXTERNO_OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^
+
 .PHONY: all clean
 
 all: $(TARGETS)
 
 clean:
-	$(RM) *.o $(TARGETS)
+	$(RM) *.o $(TARGETS) *.txt
