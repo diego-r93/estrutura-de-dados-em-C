@@ -1,6 +1,3 @@
-# large files to github
-dummy-data
-
 # Ignore all
 *
 
@@ -36,3 +33,4 @@ dummy-data
 
 # .txt files
 *.txt
+
